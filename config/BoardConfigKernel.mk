@@ -300,6 +300,19 @@ ifeq ($(OUT_DIR_PREFIX),out)
     KERNEL_BUILD_OUT_PREFIX := $(BUILD_TOP)/
 endif
 
+# NX809J uses committed prebuilt UAPI headers instead of generated includes.
+ifeq ($(TARGET_DEVICE),NX809J)
+KERNEL_MAKE_CMD := true
+ifeq ($(strip $(KERNEL_BUILD_OUT_PREFIX)),)
+KERNEL_BUILD_OUT_PREFIX := /tmp/dummy_kernel_out/
+endif
+TARGET_KERNEL_SOURCE ?= device/nubia/NX809J-kernel
+KERNEL_ARCH ?= arm64
+KERNEL_MAKE_FLAGS ?=
+KERNEL_CROSS_COMPILE ?=
+KERNEL_PATH ?= /tmp/dummy_kernel_path
+endif
+
 ifneq ($(TARGET_KERNEL_PLATFORM_TARGET),)
 KERNEL_PATH := $(abspath $(BUILD_TOP)/kernel/platform/kernel-$(TARGET_KERNEL_VERSION))
 endif
